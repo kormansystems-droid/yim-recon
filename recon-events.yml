@@ -1,0 +1,26 @@
+name: Recon events
+
+# Manual only. Read-only probe of the Momence host-schedule API to discover
+# the event/workshop session-type taxonomy. Safe to run; touches nothing.
+on:
+  workflow_dispatch:
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run events recon
+        run: python recon_events.py
+
+      - name: Upload samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: recon-events-out
+          path: recon_events_out/
+          if-no-files-found: warn
