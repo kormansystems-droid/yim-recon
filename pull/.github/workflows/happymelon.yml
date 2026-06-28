@@ -1,0 +1,25 @@
+name: Capture Happy Melon API (test)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright + Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Capture Happy Melon
+        run: python pull/capture_happymelon.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: hm_out
+          path: pull/hm_out/
+          if-no-files-found: error
