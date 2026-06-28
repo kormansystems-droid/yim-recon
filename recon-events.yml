@@ -16,7 +16,7 @@ jobs:
           python-version: "3.12"
 
       - name: Run events recon
-        run: python recon_events.py
+        run: python run: python .github/workflows/recon_events.pyrecon_events.py
 
       - name: Upload samples
         uses: actions/upload-artifact@v4
