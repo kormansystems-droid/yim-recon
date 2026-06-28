@@ -1,0 +1,30 @@
+name: Build teacher schedule (test)
+
+# Manual only — click "Run workflow", then download the pull_out artifact.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright + Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Build schedule
+        run: python pull/build_schedule.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pull_out
+          path: pull/pull_out/
+          if-no-files-found: error
