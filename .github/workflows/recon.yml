@@ -1,0 +1,30 @@
+name: Recon studio feeds
+
+# Manual only — you click "Run workflow", then download the artifact.
+on:
+  workflow_dispatch:
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright + Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Capture feeds
+        run: python pull/recon.py
+
+      - name: Upload captures
+        uses: actions/upload-artifact@v4
+        with:
+          name: recon_out
+          path: pull/recon_out/
+          if-no-files-found: error
